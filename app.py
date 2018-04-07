@@ -14,8 +14,10 @@ def configure(binder: Binder) -> Binder:
         ElasticSearchIndex,
         ElasticSearchIndex(
             ElasticSearchFactory(
-                os.environ['ELASTICSEARCH_HOST'],
-                os.environ['ELASTICSEARCH_PORT'],
+                #os.environ['ELASTICSEARCH_HOST'],
+                #os.environ['ELASTICSEARCH_PORT'],
+                '127.0.0.1',
+                9200
             ),
             'rooms',
             'room',
@@ -27,7 +29,7 @@ def configure(binder: Binder) -> Binder:
 
 
 if __name__ == '__main__':
-    app = connexion.App(__name__, specification_dir='swagger/')
+    app = connexion.FlaskApp(__name__, specification_dir='swagger/')
     app.add_api('indexer.yaml', resolver=RestyResolver('api'))
     FlaskInjector(app=app.app, modules=[configure])
     app.run(port=9090)
